@@ -90,7 +90,7 @@ app.delete('/content', function (req, res) {
     })
 
     res.json ({
-        message : "The content has been deleted"
+        message : "The content is removed"
     })
 })
 
