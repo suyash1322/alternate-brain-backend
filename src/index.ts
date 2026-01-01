@@ -9,8 +9,6 @@ import { isNamedExportBindings } from "typescript";
 
 const app = express();
 app.use(express.json());
-
-
 app.post('/signup', async function (req, res) {
     const username = req.body.username;
     const password = req.body.password;
@@ -72,6 +70,7 @@ app.post("/api/v1/content", userMiddleware, async function (req, res) {
 
         //@ts-ignore
         userId: req.userId
+        //@ts-ignore
         tags: []
     })
     res.json({
@@ -89,8 +88,8 @@ app.delete('/content', function (req, res) {
         userId: req.userId
     })
 
-    res.json ({
-        message : "The content is removed"
+    res.json({
+        message: "The content is removed"
     })
 })
 
