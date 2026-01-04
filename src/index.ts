@@ -1,10 +1,9 @@
 import express from "express";
-import { ContentModel, UserModel } from "./db";
-import mongoose, { mongo } from 'mongoose';
+import { ContentModel, LinkModel, UserModel } from "./db";
 import jwt from 'jsonwebtoken';
 import { userMiddleware } from "./middleware";
 import { JWT_SECRET } from "./config";
-import { isNamedExportBindings } from "typescript";
+import { random } from "./utils";
 
 
 const app = express();
@@ -69,16 +68,16 @@ app.post("/api/v1/content", userMiddleware, async function (req, res) {
         link,
 
         //@ts-ignore
-        userId: req.userId
+        userId: req.userId,
         //@ts-ignore
-        tags: []
+        tags: [],
     })
     res.json({
         message: "Content added"
     })
 })
 
-app.delete('/content', function (req, res) {
+app.delete('/api/v1/content',async function (req, res) {
     const contentId = req.body.contentId;
 
     await ContentModel.deleteMany({
@@ -91,6 +90,24 @@ app.delete('/content', function (req, res) {
     res.json({
         message: "The content is removed"
     })
+})
+
+app.post("/api/v1/brain/share" , userMiddleware , async(req,res) => {
+    const share = req.body.share;
+    if(share) {
+        LinkModel.create({
+            userId : req.userId,
+            hash: random(10),
+        })
+    }else {
+        LinkModel.deleteOne({
+            userId: req.userId
+        })
+    }
+})
+
+app.post("/api/v1/brain/:shareLink" ,function (req,res){
+    
 })
 
 app.listen(3000);
